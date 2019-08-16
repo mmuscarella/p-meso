@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 #                                                                              #
 #	Phosphorus Mecocosm Project: Micro Graphs                                    #
 #                                                                              #
@@ -26,25 +26,28 @@ bio.data$Treatment <- factor(design$Treatment,
 ################################################################################
 se <- function(x){x = na.omit(x);sd(x)/sqrt(length(x))}
 windows.options(width=6, height=8)
-par(mfrow=c(2,1), mar=c(0.25,4.5,0.25,0.25), oma=c(3,0.5,0.5,0.5)+0.1 ) 
+par(mfrow=c(2,1), mar=c(0.5,4.5,0.5,0.5), oma=c(3,0.5,0.5,0.5)+0.1 ) 
 
 # Bacterial Production
 bp.means <- tapply(bio.data$BP.uMC, bio.data$Treatment, mean)
 bp.se <- tapply(bio.data$BP.uMC, bio.data$Treatment, se)
 plot(bp.means, ylim=c(0,0.35), xlim=c(0.5, 6.5), pch=15, cex=2, las=1, 
-  xaxt="n", ylab=expression(paste("BP (µM C hr"^" -1", ")", sep="")), 
+  xaxt="n", yaxt = "n", ylab=expression(paste("BP (µM C hr"^" -1", ")", sep="")), 
   cex.lab=1.4, cex.axis=1.25)
 arrows(x0 = 1:6, y0 = bp.means, y1 = bp.means - bp.se, angle = 90, 
   length=0.05, lwd = 2)
 arrows(x0 = 1:6, y0 = bp.means, y1 = bp.means + bp.se, angle = 90, 
   length=0.05, lwd = 2)
 box(lwd=2)
-axis(side = 1, labels=F, lwd.ticks=2)
-axis(side = 2, labels=F, lwd.ticks=2)
-axis(side = 1, tck=0.02, labels=F, lwd.ticks=2)
-axis(side = 2, tck=0.02, labels=F, lwd.ticks=2)
+
+axis(side = 2, labels=T, at = c(0, 0.1, 0.2, 0.3), lwd.ticks=2, las = 1, cex.axis = 1.25)
+axis(side = 1, tck=-0.02, labels=F, lwd.ticks=2)
+axis(side = 1, tck=0.01, labels=F, lwd.ticks=2)
+axis(side = 2, tck=0.01, at = c(0, 0.1, 0.2, 0.3), labels=F, lwd.ticks=2)
+axis(side = 3, tck=-0.01, labels=F, lwd.ticks=2)
+axis(side = 4, tck=-0.01, at = c(0, 0.1, 0.2, 0.3), labels=F, lwd.ticks=2)
 axis(side = 3, tck=0.02, labels=F, lwd.ticks=2)
-axis(side = 4, tck=0.02, labels=F, lwd.ticks=2)
+axis(side = 4, tck=0.02, at = c(0, 0.1, 0.2, 0.3), labels=F, lwd.ticks=2)
 
 
 # Bacterial Growth Efficiency 
@@ -57,13 +60,17 @@ arrows(x0 = 1:6, y0 = bge.means, y1 = bge.means - bge.se, angle = 90,
 arrows(x0 = 1:6, y0 = bge.means, y1 = bge.means + bge.se, angle = 90, 
   length=0.05, lwd = 2)
 box(lwd=2)
-axis(side = 1, labels=c('Ctrl', 'SRP', 'AEP', 'ATP', 'PA', 'Mix'), 
+axis(side = 1, labels=c('Ctrl', 'PO4', 'AEP', 'ATP', 'PA', 'Mix'), 
   at=1:6, lwd.ticks=2, cex.axis=1.2)
 axis(side = 2, labels=F, lwd.ticks=2)
 axis(side = 1, tck=0.02, labels=F, lwd.ticks=2)
 axis(side = 2, tck=0.02, labels=F, lwd.ticks=2)
 axis(side = 3, tck=0.02, labels=F, lwd.ticks=2)
 axis(side = 4, tck=0.02, labels=F, lwd.ticks=2)
+axis(side = 3, tck=-0.02, labels=F, lwd.ticks=2)
+axis(side = 4, tck=-0.02, labels=F, lwd.ticks=2)
+
+
 dev.copy2pdf(file=paste("./bio_plot.pdf",sep=""))
 dev.copy(png, file=paste("./bio_plot.png",sep=""), bg = "white", width=72*(5*4), 
     height=72*(6*4), res=72*4)

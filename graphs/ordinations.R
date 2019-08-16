@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 #                                                                              #
 #	Phosphoros Mesocosm Experiment:  Microbial Community PCoA Graphs             #
 #                                                                              #
@@ -33,6 +33,7 @@ euks <- pmeso.pcoa.input(shared = "../mothur/output/tanks.euk.final.shared",
 se <- function(x){x = na.omit(x);sd(x)/sqrt(length(x))}
 windows.options(width=4, height=10)
 par(mfrow=c(3,1), mar=c(4.5,4.5,1,1), oma=c(1,1,1,1)+0.1 )
+par(mar = c(5, 5, 1, 1))
           
 # Heteros
   x.dim <- c(min(heteros$pcoap$V1)-(max(heteros$pcoap$V1)*0.1),
@@ -127,3 +128,48 @@ par(mfrow=c(3,1), mar=c(4.5,4.5,1,1), oma=c(1,1,1,1)+0.1 )
   dev.copy(png, file=paste("../graphs/ordinations.png",sep=""), width=72*(4),
     height=72*(10), res=72*2)
   dev.off()
+  
+  
+  par(mar = c(5, 6, 1, 1))
+  
+  # Heteros
+  x.dim <- c(min(heteros$pcoap$V1)-(max(heteros$pcoap$V1)*0.1),
+             max(heteros$pcoap$V1)+(max(heteros$pcoap$V1)*0.1))
+  y.dim <- c(min(heteros$pcoap$V2)-(max(heteros$pcoap$V2)*0.1),
+             max(heteros$pcoap$V2)+(max(heteros$pcoap$V2)*0.1))
+  # Initiate Plot
+  plot(heteros$pcoap$V1, heteros$pcoap$V2,
+       xlab="",
+       ylab="",
+       xlim=x.dim, ylim=y.dim, pch=16, cex=2.0, type="n",
+       cex.lab=1.5, cex.axis=1.2, axes=FALSE)
+  axis(side = 1, labels=T, lwd.ticks=2, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 2, labels=T, lwd.ticks=2, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 3, labels=F, lwd.ticks=2, tck = -0.02, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 4, labels=F, lwd.ticks=2, tck = -0.02, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 1, labels=F, lwd.ticks=2, tck = 0.01, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 2, labels=F, lwd.ticks=2, tck = 0.01, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 3, labels=F, lwd.ticks=2, tck = 0.01, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  axis(side = 4, labels=F, lwd.ticks=2, tck = 0.01, at=c(-0.3,-0.15,0,0.15), cex.axis=1.2, las = 1)
+  mtext(side = 1, paste("PCoA 1 (",heteros$var1, "%)", sep=""), cex = 1.5, line = 3)
+  mtext(side = 2, paste("PCoA 2 (",heteros$var2, "%)", sep=""), cex = 1.5, line = 4)
+  abline(h=0, lty="dotted")
+  abline(v=0, lty="dotted")
+  #text(min(heteros$pcoap$V1), (max(heteros$pcoap$V2) - 0.01), "A", bty="n", cex=1.5)
+  #text(min(heteros$pcoap$V1), (max(heteros$pcoap$V2) - 0.01), "Bacteria", bty="n", cex=1.5, adj = c(0.2,0))
+  box(lwd=3)
+  # Add Points & Ellipses
+  points(heteros$pcoap$V1, heteros$pcoap$V2,
+         pch=19, cex=2.0, bg="gray", col="gray")
+  #text(heteros$pcoap$V1, heteros$pcoap$V2,
+  #  labels=heteros$pcoap$Treatment, pos=3)
+  ordiellipse(cbind(heteros$pcoap$V1, heteros$pcoap$V2),
+              heteros$pcoap$Treatment, kind="se", conf=0.95,
+              lwd=2, draw = "polygon", col="gray", border = "black", 
+              label=TRUE, cex=1.2, cex.lab = 0.8)
+  #text(-0.14,-0.04,"SRP", cex=1)
+  #text(-0.165,0.01, "ATP", cex=1)
+  #text(0.01,-0.06, "Mix", cex=1)
+  #text(0.11, 0.11, "Ctrl", cex=1)
+  #text(0.07, 0.01, "Phyt", cex=1)
+  #text(0.11, -0.035, "AEP", cex=1)
